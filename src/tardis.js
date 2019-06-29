@@ -1,7 +1,7 @@
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.0
-Updated: June 28, 2019
+version: v1.1
+Updated: June 29, 2019
 Author: Mike McAllister
 Email: mike@logikbox.com
 Site: https://logikbox.com
@@ -20,6 +20,7 @@ let tardis = (function (theTime, pattern) {
     // Keep this variables private inside this closure scope
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
+
     const patterns = ["YYYY","YY","y","MMMM","MMM","MM","M","m","DDDD","DDD","DD","D","d","H","h","I","i","S","s","TT","tt"];
 
     function convertTime(theTime) {
@@ -35,8 +36,10 @@ let tardis = (function (theTime, pattern) {
             fullYear: date.getFullYear(),
             shortYear: date.getYear().toString().substr(-2),
             dayofweek: days[date.getDay()],
+            midDayofweek: days[date.getDay()].substr(0, 3),
             dayInt: date.getDay(),
             fullMonth: months[date.getMonth()],
+            midMonth: months[date.getMonth()].substr(0, 3),
             shortMonth: ("0" + (date.getMonth() + 1)).slice(-2),  
             monthInt: date.getMonth(),
             utc: date,
@@ -58,7 +61,7 @@ let tardis = (function (theTime, pattern) {
 
         return checkedTime;
     }
-    
+
     // Public methods
     let dateparts = theTime => {
         return convertTime(theTime);
@@ -120,8 +123,6 @@ let tardis = (function (theTime, pattern) {
             pattern = pattern.replace(val, replaceStr);
         });
 
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
-
         return {
             pattern: pattern,
             time: theTime
@@ -129,6 +130,29 @@ let tardis = (function (theTime, pattern) {
     };
 
     // Preset patterns
+    let ISO = theTime => {
+        let thisDate = convertTime(theTime);
+        let formattedDate = thisDate.fullYear + "-" + thisDate.shortMonth + "-" + thisDate.day;
+
+        return formattedDate;
+    };
+
+    let ShortDate = theTime => {
+        let thisDate = convertTime(theTime);
+        let formattedDate = thisDate.shortMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
+
+        return formattedDate;
+    };
+
+    let LongDate = theTime => {
+        let thisDate = convertTime(theTime);
+        let formattedDate = thisDate.midMonth + " " + thisDate.day + " " + thisDate.fullYear;
+
+        return formattedDate;
+    };
+
+    
+
     let MonthDateTime = theTime => {
         let thisDate = convertTime(theTime);
         let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
@@ -154,6 +178,9 @@ let tardis = (function (theTime, pattern) {
     return {
         dateparts: dateparts,
         patterned: patterned,
+        ISO: ISO,
+        ShortDate: ShortDate,
+        LongDate: LongDate,
         MonthDateTime: MonthDateTime,
         DayMonthDate: DayMonthDate,
         doctorwho: doctorwho
@@ -165,9 +192,9 @@ let tardis = (function (theTime, pattern) {
 console.log(tardis.dateparts());
 console.log(tardis.patterned(-21764880, 'M/DD/YYYY - H:I:s'));
 console.log(tardis.patterned("", 'M/DD/YYYY - H:I:s'));
-// console.log(tardis.doctorwho());
-// console.log(tardis.DayMonthDate());
-// console.log(tardis.MonthDateTime());
+console.log(tardis.ISO());
+console.log(tardis.ShortDate());
+console.log(tardis.LongDate());
 // console.log('-------------------------------------');
 // console.log(tardis.dateparts(-21764880));
 // console.log(tardis.DayMonthDate(-21764880));
