@@ -1,6 +1,6 @@
 {
   "name": "tardis",
-  "version": "1.3.0",
+  "version": "1.0.0",
   "description": "A simple Date, Time converter & formatter",
   "main": "index.js",
   "scripts": {
@@ -30,7 +30,6 @@
   "dependencies": {
     "@babel/preset-env": "^7.4.5",
     "gulp-babel": "^8.0.0",
-    "gulp-plumber": "^1.2.1",
-    "num-words": "^1.0.1"
+    "gulp-plumber": "^1.2.1"
   }
 }
