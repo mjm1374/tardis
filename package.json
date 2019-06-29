@@ -1,5 +1,5 @@
 {
-  "name": "tardis",
+  "name": "lbx-tardis",
   "version": "1.0.0",
   "description": "A simple Date, Time converter & formatter",
   "main": "index.js",
@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@babel/preset-env": "^7.4.5",
+    "express": "^4.17.1",
     "gulp-babel": "^8.0.0",
     "gulp-plumber": "^1.2.1"
   }
