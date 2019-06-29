@@ -19,7 +19,7 @@ public methods:
     taris.MonthDateTime({date}); -- preformatted displays
     taris.DayMonthDate({date}); -- preformatted displays
 */
-var tardis = function (theTime, pattern) {
+module.exports = function tardis(theTime, pattern) {
   // Keep this variables private inside this closure scope
   var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   var months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
@@ -341,17 +341,3 @@ var tardis = function (theTime, pattern) {
     doctorwho: doctorwho
   };
 }();
-
-console.log(tardis.dateparts()); // console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
-
-console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt')); // console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
-// console.log(tardis.patterned('', 'MMMM MMM , MM M m'));
-// console.log(tardis.patterned('', 'DDDD DDD DD, D d'));
-// console.log(tardis.patterned('', 'MMM DDD, DD YY'));
-// console.log(tardis.ISO());
-// console.log(tardis.ShortDate());
-// console.log(tardis.LongDate());
-// console.log('-------------------------------------');
-// console.log(tardis.dateparts(1133481000));
-// console.log(tardis.DayMonthDate(1133481000));
-// console.log(tardis.MonthDateTime(1133481000));
