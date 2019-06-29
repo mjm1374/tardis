@@ -1,6 +1,6 @@
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.1.2
+version: v1.2.0
 Updated: June 29, 2019
 Author: Mike McAllister
 Email: mike@logikbox.com
@@ -20,9 +20,12 @@ let tardis = (function (theTime, pattern) {
     // Keep this variables private inside this closure scope
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
-    const patterns = ["YYYY","YY","y","MMMM","MMM","MM","M","m","DDDD","DDD","DD","D","d","H","h","I","i","S","s","TT","tt"];
+    const patterns = ["YYYY", "YYY", "YY", "y", "MMMM", "MMM", "MM", "M", "m", "DDDD", "DDD", "DD", "D", "d", "HHHH", "HH", "H", "h", "IIII", "II", "I", "i", "SSSS", "SS", "S","s","TT","tt"];
     const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
     const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    let replacement = {key:null, value:null};
+
+    // Private Methods ----------------------------------------------------------------------------------------------- //
 
     function convertTime(theTime) {
         theTime = checkUnixTime(theTime);
@@ -92,7 +95,14 @@ let tardis = (function (theTime, pattern) {
         return str;
     }
 
-    // Public methods
+    function replaceAll(str, replaceWhat, replaceTo) {
+        var re = new RegExp(replaceWhat, 'g');
+        return str.replace(re, replaceTo);
+    }
+
+    // Public Methods ----------------------------------------------------------------------------------------------- //
+    
+
     let dateparts = theTime => {
         return convertTime(theTime);
     };
@@ -103,63 +113,95 @@ let tardis = (function (theTime, pattern) {
         let replaceStr = '';
         let TT = (thisDate.hour < 11) ? "AM" : "PM";
         let tt = (thisDate.hour < 11) ? "am" : "pm";
+        let replaceMap = [];
+        let replaceInt = 0;
 
         patterns.forEach(function (val, index) {
             //console.log(val);
             switch (val) {
                 case 'YYYY':
                     replaceStr = thisDate.fullYear;
-                break;
+                    break;
+                case 'YYY':
+                    replaceStr = thisDate.wordYear;
+                    break;
                 case 'YY':
-                replaceStr = thisDate.YYear;
-                break;
+                    replaceStr = thisDate.YYear;
+                    break;
                 case 'Y':
-                replaceStr = thisDate.year;
-                break;
+                    replaceStr = thisDate.year;
+                    break;
                 case 'MMMM':
-                replaceStr = thisDate.fullMonth;
-                break;
+                    replaceStr = thisDate.fullMonth;
+                    break;
                 case 'MM':
-                replaceStr = thisDate.MMonth;
-                break;
+                    replaceStr = thisDate.MMonth;
+                    break;
                 case 'M':
-                replaceStr = thisDate.month;
-                break;
+                    replaceStr = thisDate.month;
+                    break;
+                case 'm':
+                    replaceStr = thisDate.monthInt;
+                    break;
                 case 'DDDD':
-                replaceStr = thisDate.fullDay;
-                break;
+                    replaceStr = thisDate.fullDay;
+                    break;
+                case 'DDD':
+                    replaceStr = thisDate.shortDay;
+                    break;
                 case 'DD':
-                replaceStr = thisDate.day;
-                break;
+                    replaceStr = thisDate.day;
+                    break;
                 case 'D':
                 replaceStr = thisDate.day;
-                break;
+                    break;
+                case 'D':
+                    replaceStr = thisDate.dayInt;
+                    break;
+                case 'HHHH':
+                    replaceStr = thisDate.wordHour;
+                    break;
+                case 'HH':
+                    replaceStr = thisDate.HHour;
+                    break;
                 case 'H':
                 replaceStr = thisDate.hour;
-                break;
+                    break;
                 case 'h':
-                replaceStr = thisDate.hour;
-                break;
+                    replaceStr = thisDate.hourInt;
+                    break;
+                case 'IIII':
+                    replaceStr = thisDate.wordMin;
+                    break;
+                case 'II':
+                    replaceStr = thisDate.MMin;
+                    break;
                 case 'I':
-                replaceStr = thisDate.min;
-                break;
+                    replaceStr = thisDate.min;
+                    break;
                 case 'i':
-                replaceStr = thisDate.min;
-                break;
+                    replaceStr = thisDate.minInt;
+                    break;
+                case 'SSSS':
+                    replaceStr = thisDate.wordSec;
+                    break;
+                case 'SS':
+                    replaceStr = thisDate.SSec;
+                    break;
                 case 'S':
-                replaceStr = thisDate.sec;
-                break;
+                    replaceStr = thisDate.sec;
+                    break;
                 case 's':
-                replaceStr = thisDate.sec;
-                break;
+                    replaceStr = thisDate.sec;
+                    break;
                 case 'TT':
-                replaceStr = TT;
-                break;
+                    replaceStr = TT;
+                    break;
                 case 'tt':
-                replaceStr = tt;
-                break;
+                    replaceStr = tt;
+                    break;
             }
-            pattern = pattern.replace(val, replaceStr);
+            pattern = replaceAll(pattern, val, replaceStr);
         });
 
         return {
@@ -229,6 +271,8 @@ let tardis = (function (theTime, pattern) {
 console.log(tardis.dateparts());
 console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
 console.log(tardis.patterned('', 'M/DD/YYYY - H:I:s tt'));
+console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
+console.log(tardis.patterned('', 'YYYY YYYY, YYYY'));
 console.log(tardis.ISO());
 console.log(tardis.ShortDate());
 console.log(tardis.LongDate());

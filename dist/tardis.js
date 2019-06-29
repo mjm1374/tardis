@@ -2,7 +2,7 @@
 
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.1.2
+version: v1.2.0
 Updated: June 29, 2019
 Author: Mike McAllister
 Email: mike@logikbox.com
@@ -20,9 +20,13 @@ var tardis = function (theTime, pattern) {
   // Keep this variables private inside this closure scope
   var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   var months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
-  var patterns = ["YYYY", "YY", "y", "MMMM", "MMM", "MM", "M", "m", "DDDD", "DDD", "DD", "D", "d", "H", "h", "I", "i", "S", "s", "TT", "tt"];
+  var patterns = ["YYYY", "YYY", "YY", "y", "MMMM", "MMM", "MM", "M", "m", "DDDD", "DDD", "DD", "D", "d", "HHHH", "HH", "H", "h", "IIII", "II", "I", "i", "SSSS", "SS", "S", "s", "TT", "tt"];
   var a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
   var b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+  var replacement = {
+    key: null,
+    value: null
+  }; // Private Methods ----------------------------------------------------------------------------------------------- //
 
   function convertTime(theTime) {
     theTime = checkUnixTime(theTime);
@@ -87,7 +91,12 @@ var tardis = function (theTime, pattern) {
     str += n[4] != 0 ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
     str += n[5] != 0 ? (str != '' ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
     return str;
-  } // Public methods
+  }
+
+  function replaceAll(str, replaceWhat, replaceTo) {
+    var re = new RegExp(replaceWhat, 'g');
+    return str.replace(re, replaceTo);
+  } // Public Methods ----------------------------------------------------------------------------------------------- //
 
 
   var dateparts = function dateparts(theTime) {
@@ -100,11 +109,17 @@ var tardis = function (theTime, pattern) {
     var replaceStr = '';
     var TT = thisDate.hour < 11 ? "AM" : "PM";
     var tt = thisDate.hour < 11 ? "am" : "pm";
+    var replaceMap = [];
+    var replaceInt = 0;
     patterns.forEach(function (val, index) {
       //console.log(val);
       switch (val) {
         case 'YYYY':
           replaceStr = thisDate.fullYear;
+          break;
+
+        case 'YYY':
+          replaceStr = thisDate.wordYear;
           break;
 
         case 'YY':
@@ -127,8 +142,16 @@ var tardis = function (theTime, pattern) {
           replaceStr = thisDate.month;
           break;
 
+        case 'm':
+          replaceStr = thisDate.monthInt;
+          break;
+
         case 'DDDD':
           replaceStr = thisDate.fullDay;
+          break;
+
+        case 'DDD':
+          replaceStr = thisDate.shortDay;
           break;
 
         case 'DD':
@@ -139,12 +162,32 @@ var tardis = function (theTime, pattern) {
           replaceStr = thisDate.day;
           break;
 
+        case 'D':
+          replaceStr = thisDate.dayInt;
+          break;
+
+        case 'HHHH':
+          replaceStr = thisDate.wordHour;
+          break;
+
+        case 'HH':
+          replaceStr = thisDate.HHour;
+          break;
+
         case 'H':
           replaceStr = thisDate.hour;
           break;
 
         case 'h':
-          replaceStr = thisDate.hour;
+          replaceStr = thisDate.hourInt;
+          break;
+
+        case 'IIII':
+          replaceStr = thisDate.wordMin;
+          break;
+
+        case 'II':
+          replaceStr = thisDate.MMin;
           break;
 
         case 'I':
@@ -152,7 +195,15 @@ var tardis = function (theTime, pattern) {
           break;
 
         case 'i':
-          replaceStr = thisDate.min;
+          replaceStr = thisDate.minInt;
+          break;
+
+        case 'SSSS':
+          replaceStr = thisDate.wordSec;
+          break;
+
+        case 'SS':
+          replaceStr = thisDate.SSec;
           break;
 
         case 'S':
@@ -172,7 +223,7 @@ var tardis = function (theTime, pattern) {
           break;
       }
 
-      pattern = pattern.replace(val, replaceStr);
+      pattern = replaceAll(pattern, val, replaceStr);
     });
     return {
       pattern: pattern,
@@ -233,6 +284,8 @@ var tardis = function (theTime, pattern) {
 console.log(tardis.dateparts());
 console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
 console.log(tardis.patterned('', 'M/DD/YYYY - H:I:s tt'));
+console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
+console.log(tardis.patterned('', 'YYYY YYYY, YYYY'));
 console.log(tardis.ISO());
 console.log(tardis.ShortDate());
 console.log(tardis.LongDate()); // console.log('-------------------------------------');
