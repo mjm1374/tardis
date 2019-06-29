@@ -21,26 +21,45 @@ let tardis = (function (theTime, pattern) {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
     const patterns = ["YYYY","YY","y","MMMM","MMM","MM","M","m","DDDD","DDD","DD","D","d","H","h","I","i","S","s","TT","tt"];
+    const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
+    const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 
     function convertTime(theTime) {
         theTime = checkUnixTime(theTime);
         let date = new Date(theTime * 1000);
         let dateObj = {
             year: date.getYear(),
-            day: date.getDate(),
             month: (date.getMonth() + 1),
+            day: date.getDate(),
             hour: date.getHours(),
             min: ("0" + date.getMinutes()).slice(-2),
             sec: ("0" + date.getSeconds()).slice(-2),
+            
             fullYear: date.getFullYear(),
             shortYear: date.getYear().toString().substr(-2),
-            dayofweek: days[date.getDay()],
-            midDayofweek: days[date.getDay()].substr(0, 3),
-            dayInt: date.getDay(),
+            wordYear: inWords(date.getFullYear()).trim(),
             fullMonth: months[date.getMonth()],
-            midMonth: months[date.getMonth()].substr(0, 3),
-            shortMonth: ("0" + (date.getMonth() + 1)).slice(-2),  
+            shortMonth: months[date.getMonth()].substr(0, 3),
+            fullDay: days[date.getDay()],
+            shortDay: days[date.getDay()].substr(0, 3),
+            wordHour: inWords(date.getHours()).trim(),
+            wordMin: inWords(date.getMinutes()).trim(),
+            wordSec: inWords(date.getSeconds()).trim(),
+
+            yearInt: date.getYear(),
             monthInt: date.getMonth(),
+            dayInt: date.getDay(),
+            hourInt: date.getHours(),
+            minInt: date.getMinutes(), 
+            secInt: date.getSeconds(),
+
+            YYear: date.getYear().toString().substr(-2),
+            MMonth: ("0" + (date.getMonth() + 1)).slice(-2), 
+            DDay: ("0" + (date.getDate() + 1)).slice(-2),
+            HHour: ("0" + date.getHours()).slice(-2), 
+            MMin: ("0" + date.getMinutes()).slice(-2),
+            SSec: ("0" + date.getSeconds()).slice(-2),
+
             utc: date,
             timestamp: theTime
         };
@@ -58,6 +77,19 @@ let tardis = (function (theTime, pattern) {
         }
 
         return checkedTime;
+    }
+
+    // https://github.com/salmanm/num-words
+    function inWords(num) {
+        if ((num = num.toString()).length > 9) return 'overflow';
+        let n = ('000000000' + num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+        if (!n) return; var str = '';
+        str += (n[1] != 0) ? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore ' : '';
+        str += (n[2] != 0) ? (a[Number(n[2])] || b[n[2][0]] + ' ' + a[n[2][1]]) + 'lakh ' : '';
+        str += (n[3] != 0) ? (a[Number(n[3])] || b[n[3][0]] + ' ' + a[n[3][1]]) + 'thousand ' : '';
+        str += (n[4] != 0) ? (a[Number(n[4])] || b[n[4][0]] + ' ' + a[n[4][1]]) + 'hundred ' : '';
+        str += (n[5] != 0) ? ((str != '') ? 'and ' : '') + (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]]) : '';
+        return str;
     }
 
     // Public methods
@@ -79,7 +111,7 @@ let tardis = (function (theTime, pattern) {
                     replaceStr = thisDate.fullYear;
                 break;
                 case 'YY':
-                replaceStr = thisDate.shortYear;
+                replaceStr = thisDate.YYear;
                 break;
                 case 'Y':
                 replaceStr = thisDate.year;
@@ -88,13 +120,13 @@ let tardis = (function (theTime, pattern) {
                 replaceStr = thisDate.fullMonth;
                 break;
                 case 'MM':
-                replaceStr = thisDate.shortMonth;
+                replaceStr = thisDate.MMonth;
                 break;
                 case 'M':
                 replaceStr = thisDate.month;
                 break;
                 case 'DDDD':
-                replaceStr = thisDate.dayofweek;
+                replaceStr = thisDate.fullDay;
                 break;
                 case 'DD':
                 replaceStr = thisDate.day;
@@ -139,21 +171,21 @@ let tardis = (function (theTime, pattern) {
     // Preset patterns
     let ISO = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullYear + "-" + thisDate.shortMonth + "-" + thisDate.day;
+        let formattedDate = thisDate.fullYear + "-" + thisDate.MMonth + "-" + thisDate.day;
 
         return formattedDate;
     };
 
     let ShortDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.shortMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
+        let formattedDate = thisDate.MMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
 
         return formattedDate;
     };
 
     let LongDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.midMonth + " " + thisDate.day + " " + thisDate.fullYear;
+        let formattedDate = thisDate.shortMonth + " " + thisDate.day + " " + thisDate.fullYear;
 
         return formattedDate;
     };
@@ -167,7 +199,7 @@ let tardis = (function (theTime, pattern) {
 
     let DayMonthDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.dayofweek + ",  " + thisDate.fullMonth + " " + thisDate.day + "." + thisDate.fullYear;
+        let formattedDate = thisDate.fullDay + ",  " + thisDate.fullMonth + " " + thisDate.day + "." + thisDate.fullYear;
 
         return formattedDate;
     };
