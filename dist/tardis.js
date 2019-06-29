@@ -16,10 +16,11 @@ public methods:
     taris.MonthDateTime({date}); -- preformatted displays
     taris.DayMonthDate({date}); -- preformatted displays
 */
-var tardis = function (theTime) {
+var tardis = function (theTime, pattern) {
   // Keep this variables private inside this closure scope
   var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   var months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
+  var patterns = ["YYYY", "YY", "y", "MMMM", "MMM", "MM", "M", "m", "DDDD", "DDD", "DD", "D", "d", "H", "h", "I", "i", "S", "s", "TT", "tt"];
 
   function convertTime(theTime) {
     theTime = checkUnixTime(theTime);
@@ -32,9 +33,11 @@ var tardis = function (theTime) {
       min: ("0" + date.getMinutes()).slice(-2),
       sec: ("0" + date.getSeconds()).slice(-2),
       fullYear: date.getFullYear(),
+      shortYear: date.getYear().toString().substr(-2),
       dayofweek: days[date.getDay()],
       dayInt: date.getDay(),
       fullMonth: months[date.getMonth()],
+      shortMonth: ("0" + (date.getMonth() + 1)).slice(-2),
       monthInt: date.getMonth(),
       utc: date,
       timestamp: theTime
@@ -54,23 +57,103 @@ var tardis = function (theTime) {
     }
 
     return checkedTime;
-  }
+  } // Public methods
+
 
   var dateparts = function dateparts(theTime) {
     return convertTime(theTime);
-  };
+  }; // Freeform patterns
+
+
+  var patterned = function patterned(theTime, pattern) {
+    var thisDate = convertTime(theTime);
+    var replaceStr = '';
+    patterns.forEach(function (val, index) {
+      //console.log(val);
+      switch (val) {
+        case 'YYYY':
+          replaceStr = thisDate.fullYear;
+          break;
+
+        case 'YY':
+          replaceStr = thisDate.shortYear;
+          break;
+
+        case 'Y':
+          replaceStr = thisDate.year;
+          break;
+
+        case 'MMMM':
+          replaceStr = thisDate.fullMonth;
+          break;
+
+        case 'MM':
+          replaceStr = thisDate.shortMonth;
+          break;
+
+        case 'M':
+          replaceStr = thisDate.month;
+          break;
+
+        case 'DDDD':
+          replaceStr = thisDate.dayofweek;
+          break;
+
+        case 'DD':
+          replaceStr = thisDate.day;
+          break;
+
+        case 'D':
+          replaceStr = thisDate.day;
+          break;
+
+        case 'H':
+          replaceStr = thisDate.hour;
+          break;
+
+        case 'h':
+          replaceStr = thisDate.hour;
+          break;
+
+        case 'I':
+          replaceStr = thisDate.min;
+          break;
+
+        case 'i':
+          replaceStr = thisDate.min;
+          break;
+
+        case 'S':
+          replaceStr = thisDate.sec;
+          break;
+
+        case 's':
+          replaceStr = thisDate.sec;
+          break;
+      }
+
+      pattern = pattern.replace(val, replaceStr);
+    });
+    var formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
+    return {
+      pattern: pattern,
+      time: theTime
+    };
+  }; // Preset patterns
+
 
   var MonthDateTime = function MonthDateTime(theTime) {
     var thisDate = convertTime(theTime);
-    var formatteDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
-    return formatteDate;
+    var formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
+    return formattedDate;
   };
 
   var DayMonthDate = function DayMonthDate(theTime) {
     var thisDate = convertTime(theTime);
-    var formatteDate = thisDate.dayofweek + ",  " + thisDate.fullMonth + " " + thisDate.day + "." + thisDate.fullYear;
-    return formatteDate;
-  };
+    var formattedDate = thisDate.dayofweek + ",  " + thisDate.fullMonth + " " + thisDate.day + "." + thisDate.fullYear;
+    return formattedDate;
+  }; // Nerd stuff
+
 
   var doctorwho = function doctorwho() {
     console.log('Spoilers!');
@@ -80,12 +163,16 @@ var tardis = function (theTime) {
 
   return {
     dateparts: dateparts,
+    patterned: patterned,
     MonthDateTime: MonthDateTime,
     DayMonthDate: DayMonthDate,
     doctorwho: doctorwho
   };
-}(); // console.log(tardis.dateparts());
-// console.log(tardis.doctorwho());
+}();
+
+console.log(tardis.dateparts());
+console.log(tardis.patterned(-21764880, 'M/DD/YYYY - H:I:s'));
+console.log(tardis.patterned("", 'M/DD/YYYY - H:I:s')); // console.log(tardis.doctorwho());
 // console.log(tardis.DayMonthDate());
 // console.log(tardis.MonthDateTime());
 // console.log('-------------------------------------');
