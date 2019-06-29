@@ -1,6 +1,6 @@
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.1
+version: v1.1.2
 Updated: June 29, 2019
 Author: Mike McAllister
 Email: mike@logikbox.com
@@ -49,7 +49,6 @@ let tardis = (function (theTime, pattern) {
 
     function checkUnixTime(theTime) {
         if (theTime == '' || theTime == undefined) theTime = Math.floor(Date.now() / 1000);
-        //console.log(theTime);
         let checkedTime = theTime;
 
         if (!isNaN(Date.parse(checkedTime))) {
@@ -196,12 +195,12 @@ let tardis = (function (theTime, pattern) {
 
 
 console.log(tardis.dateparts());
-console.log(tardis.patterned(-21764880, 'M/DD/YYYY - H:I:s TT tt'));
+console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
 console.log(tardis.patterned('', 'M/DD/YYYY - H:I:s tt'));
 console.log(tardis.ISO());
 console.log(tardis.ShortDate());
 console.log(tardis.LongDate());
 // console.log('-------------------------------------');
-// console.log(tardis.dateparts(-21764880));
-// console.log(tardis.DayMonthDate(-21764880));
-// console.log(tardis.MonthDateTime(-21764880));
+// console.log(tardis.dateparts(1133481000));
+// console.log(tardis.DayMonthDate(1133481000));
+// console.log(tardis.MonthDateTime(1133481000));
