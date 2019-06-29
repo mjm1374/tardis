@@ -1,6 +1,6 @@
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.2.0
+version: v1.3.0
 Updated: June 29, 2019
 Author: Mike McAllister
 Email: mike@logikbox.com
@@ -125,10 +125,9 @@ let tardis = (function (theTime, pattern) {
         let replaceInt = 0;
 
 
-         patterns.forEach(function (val, index) {
+        patterns.forEach(function (val, index) {
             replaceInt++;
             let thisEdit = '';
-
             switch (val) {
                 case 'YYYY':
                     replaceStr = '{{' + replaceInt + '}}';
@@ -206,6 +205,7 @@ let tardis = (function (theTime, pattern) {
                     break;
                 case 'IIII': 
                     replaceStr = '{{' + replaceInt + '}}';
+
                     thisEdit = new replacement(replaceStr, thisDate.wordMin);
                     break;
                 case 'II': 
@@ -231,18 +231,22 @@ let tardis = (function (theTime, pattern) {
                 case 'S': 
                     replaceStr = '{{' + replaceInt + '}}';
                     thisEdit = new replacement(replaceStr, thisDate.sec);
+                    //console.log(replaceInt + ' - ' + thisDate.sec);
                     break;
                 case 's': 
                     replaceStr = '{{' + replaceInt + '}}';
                     thisEdit = new replacement(replaceStr, thisDate.secInt);
+                    //console.log(replaceInt + ' - ' + thisDate.secInt);
                     break;
                 case 'TT': 
                     replaceStr = '{{' + replaceInt + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.TT);
+                    thisEdit = new replacement(replaceStr, TT);
+                    //console.log(replaceInt + ' - ' + TT);
                     break;
                 case 'tt': 
                     replaceStr = '{{' + replaceInt + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.tt);
+                    thisEdit = new replacement(replaceStr, tt);
+                    //console.log(replaceInt + ' - ' + tt);
                     break;
             }
             replaceMap.push(thisEdit);
@@ -322,11 +326,13 @@ let tardis = (function (theTime, pattern) {
 }());
 
 
-// console.log(tardis.dateparts());
+console.log(tardis.dateparts());
 console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
-console.log(tardis.patterned('', 'M/DD/YYYY - H:I:s tt'));
+console.log(tardis.patterned('', 'M/DD/YYYY - HH:II:SS tt'));
 console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
- console.log(tardis.patterned('', 'YYYY YYYY, YYYY'));
+console.log(tardis.patterned('', 'MMMM MMM , MM M m'));
+console.log(tardis.patterned('', 'DDDD DDD DD, D d'));
+console.log(tardis.patterned('', 'MMM DDD, DD YY'));
 // console.log(tardis.ISO());
 // console.log(tardis.ShortDate());
 // console.log(tardis.LongDate());
