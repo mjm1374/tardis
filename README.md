@@ -38,6 +38,6 @@ In case you notice a bug, please open an issue mentioning the input that has cau
 
 ## Acknowledgments
 
-* Salman Mitha @ [num-words ]()
+* Salman Mitha @ [num-words ](https://github.com/salmanm/num-words)
 * Barmar @ [replaceAll regex](https://stackoverflow.com/users/1491895/barmar)
 
