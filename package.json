@@ -1,0 +1,35 @@
+{
+  "name": "tardis",
+  "version": "1.0.0",
+  "description": "A simple Date, Time converter & formatter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjm1374/tardis.git"
+  },
+  "keywords": [
+    "Date",
+    "Time",
+    "Converter",
+    "Formatter",
+    "Formatting"
+  ],
+  "author": "Mike McAllister",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjm1374/tardis/issues"
+  },
+  "homepage": "https://github.com/mjm1374/tardis#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "gulp": "^4.0.2"
+  },
+  "dependencies": {
+    "@babel/preset-env": "^7.4.5",
+    "gulp-babel": "^8.0.0",
+    "gulp-plumber": "^1.2.1"
+  }
+}
