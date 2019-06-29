@@ -92,8 +92,10 @@ var tardis = function (theTime, pattern) {
   }
 
   function replaceAll(str, replaceWhat, replaceTo) {
+    replaceWhat = replaceWhat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     var re = new RegExp(replaceWhat, 'g');
     return str.replace(re, replaceTo);
+    ;
   } // Public Methods ----------------------------------------------------------------------------------------------- //
 
 
@@ -102,13 +104,13 @@ var tardis = function (theTime, pattern) {
   };
 
   var replacement = function replacement() {
-    var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-    var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    var val = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
 
     _classCallCheck(this, replacement);
 
     this.key = key;
-    this.value = value;
+    this.val = val;
   }; // Freeform patterns
 
 
@@ -139,7 +141,7 @@ var tardis = function (theTime, pattern) {
           thisEdit = new replacement(replaceStr, thisDate.YYear);
           break;
 
-        case 'Y':
+        case 'y':
           replaceStr = '{{' + replaceInt + '}}';
           thisEdit = new replacement(replaceStr, thisDate.year);
           break;
@@ -147,6 +149,11 @@ var tardis = function (theTime, pattern) {
         case 'MMMM':
           replaceStr = '{{' + replaceInt + '}}';
           thisEdit = new replacement(replaceStr, thisDate.fullMonth);
+          break;
+
+        case 'MMM':
+          replaceStr = '{{' + replaceInt + '}}';
+          thisEdit = new replacement(replaceStr, thisDate.shortMonth);
           break;
 
         case 'MM':
@@ -248,7 +255,7 @@ var tardis = function (theTime, pattern) {
 
         case 's':
           replaceStr = '{{' + replaceInt + '}}';
-          thisEdit = new replacement(replaceStr, thisDate.sec);
+          thisEdit = new replacement(replaceStr, thisDate.secInt);
           break;
 
         case 'TT':
@@ -265,6 +272,15 @@ var tardis = function (theTime, pattern) {
       replaceMap.push(thisEdit);
       pattern = replaceAll(pattern, val, replaceStr);
     });
+
+    for (var i = 0; i < replaceMap.length; i++) {
+      var rpl = replaceMap[i];
+
+      if (rpl.val != '') {
+        pattern = replaceAll(pattern, rpl.key, rpl.val);
+      }
+    }
+
     return {
       pattern: pattern,
       time: theTime
@@ -319,16 +335,16 @@ var tardis = function (theTime, pattern) {
     DayMonthDate: DayMonthDate,
     doctorwho: doctorwho
   };
-}();
+}(); // console.log(tardis.dateparts());
 
-console.log(tardis.dateparts());
+
 console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
 console.log(tardis.patterned('', 'M/DD/YYYY - H:I:s tt'));
 console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
-console.log(tardis.patterned('', 'YYYY YYYY, YYYY'));
-console.log(tardis.ISO());
-console.log(tardis.ShortDate());
-console.log(tardis.LongDate()); // console.log('-------------------------------------');
+console.log(tardis.patterned('', 'YYYY YYYY, YYYY')); // console.log(tardis.ISO());
+// console.log(tardis.ShortDate());
+// console.log(tardis.LongDate());
+// console.log('-------------------------------------');
 // console.log(tardis.dateparts(1133481000));
 // console.log(tardis.DayMonthDate(1133481000));
 // console.log(tardis.MonthDateTime(1133481000));
