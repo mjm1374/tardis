@@ -70,6 +70,8 @@ var tardis = function (theTime, pattern) {
   var patterned = function patterned(theTime, pattern) {
     var thisDate = convertTime(theTime);
     var replaceStr = '';
+    var TT = thisDate.hour < 11 ? "AM" : "PM";
+    var tt = thisDate.hour < 11 ? "am" : "pm";
     patterns.forEach(function (val, index) {
       //console.log(val);
       switch (val) {
@@ -132,6 +134,14 @@ var tardis = function (theTime, pattern) {
         case 's':
           replaceStr = thisDate.sec;
           break;
+
+        case 'TT':
+          replaceStr = TT;
+          break;
+
+        case 'tt':
+          replaceStr = tt;
+          break;
       }
 
       pattern = pattern.replace(val, replaceStr);
@@ -193,8 +203,8 @@ var tardis = function (theTime, pattern) {
 }();
 
 console.log(tardis.dateparts());
-console.log(tardis.patterned(-21764880, 'M/DD/YYYY - H:I:s'));
-console.log(tardis.patterned("", 'M/DD/YYYY - H:I:s'));
+console.log(tardis.patterned(-21764880, 'M/DD/YYYY - H:I:s TT tt'));
+console.log(tardis.patterned('', 'M/DD/YYYY - H:I:s tt'));
 console.log(tardis.ISO());
 console.log(tardis.ShortDate());
 console.log(tardis.LongDate()); // console.log('-------------------------------------');
