@@ -121,155 +121,153 @@ var tardis = function (theTime, pattern) {
     var TT = thisDate.hour < 11 ? "AM" : "PM";
     var tt = thisDate.hour < 11 ? "am" : "pm";
     var replaceMap = [];
-    var replaceInt = 0;
     patterns.forEach(function (val, index) {
-      replaceInt++;
       var thisEdit = '';
 
       switch (val) {
         case 'YYYY':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.fullYear);
           break;
 
         case 'YYY':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.wordYear);
           break;
 
         case 'YY':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.YYear);
           break;
 
         case 'y':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.year);
           break;
 
         case 'MMMM':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.fullMonth);
           break;
 
         case 'MMM':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.shortMonth);
           break;
 
         case 'MM':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.MMonth);
           break;
 
         case 'M':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.month);
           break;
 
         case 'm':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.monthInt);
           break;
 
         case 'DDDD':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.fullDay);
           break;
 
         case 'DDD':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.shortDay);
           break;
 
         case 'DD':
           replaceStr = thisDate.day;
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.DDay);
           break;
 
         case 'D':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.day);
           break;
 
         case 'd':
           replaceStr = thisDate.dayInt;
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.dayInt);
           break;
 
         case 'HHHH':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.wordHour);
           break;
 
         case 'HH':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.HHour);
           break;
 
         case 'H':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.hour);
           break;
 
         case 'h':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.hourInt);
           break;
 
         case 'IIII':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.wordMin);
           break;
 
         case 'II':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.MMin);
           break;
 
         case 'I':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.min);
           break;
 
         case 'i':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.minInt);
           break;
 
         case 'SSSS':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.wordSec);
           break;
 
         case 'SS':
-          replaceStr = '{{' + replaceInt + '}}';
+          replaceStr = '{{' + index + '}}';
           thisEdit = new replacement(replaceStr, thisDate.SSec);
           break;
 
         case 'S':
-          replaceStr = '{{' + replaceInt + '}}';
-          thisEdit = new replacement(replaceStr, thisDate.sec); //console.log(replaceInt + ' - ' + thisDate.sec);
+          replaceStr = '{{' + index + '}}';
+          thisEdit = new replacement(replaceStr, thisDate.sec); //console.log(index + ' - ' + thisDate.sec);
 
           break;
 
         case 's':
-          replaceStr = '{{' + replaceInt + '}}';
-          thisEdit = new replacement(replaceStr, thisDate.secInt); //console.log(replaceInt + ' - ' + thisDate.secInt);
+          replaceStr = '{{' + index + '}}';
+          thisEdit = new replacement(replaceStr, thisDate.secInt); //console.log(index + ' - ' + thisDate.secInt);
 
           break;
 
         case 'TT':
-          replaceStr = '{{' + replaceInt + '}}';
-          thisEdit = new replacement(replaceStr, TT); //console.log(replaceInt + ' - ' + TT);
+          replaceStr = '{{' + index + '}}';
+          thisEdit = new replacement(replaceStr, TT); //console.log(index + ' - ' + TT);
 
           break;
 
         case 'tt':
-          replaceStr = '{{' + replaceInt + '}}';
-          thisEdit = new replacement(replaceStr, tt); //console.log(replaceInt + ' - ' + tt);
+          replaceStr = '{{' + index + '}}';
+          thisEdit = new replacement(replaceStr, tt); //console.log(index + ' - ' + tt);
 
           break;
       }
@@ -346,8 +344,9 @@ var tardis = function (theTime, pattern) {
 // console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
 // console.log(tardis.patterned('', 'MMMM MMM , MM M m'));
 // console.log(tardis.patterned('', 'DDDD DDD DD, D d'));
-// console.log(tardis.patterned('', 'MMM DDD, DD YY'));
-// console.log(tardis.ISO());
+
+
+console.log(tardis.patterned('', 'MMM DDD, DD YY')); // console.log(tardis.ISO());
 // console.log(tardis.ShortDate());
 // console.log(tardis.LongDate());
 // console.log('-------------------------------------');
