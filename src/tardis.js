@@ -327,9 +327,9 @@ let tardis = (function (theTime, pattern) {
 }());
 
 
- console.log(tardis.dateparts());
+// console.log(tardis.dateparts());
 // console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:s TT tt'));
- console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt'));
+// console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt'));
 // console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
 // console.log(tardis.patterned('', 'MMMM MMM , MM M m'));
 // console.log(tardis.patterned('', 'DDDD DDD DD, D d'));

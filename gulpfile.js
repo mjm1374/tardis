@@ -3,12 +3,10 @@
 const gulp = require("gulp");
 const babel = require('gulp-babel');
 const plumber = require("gulp-plumber");
-const tardis = require("tardis");
 
 function defaultTask(done) {
     // place code for your default task here
     console.log('Gulp 4 is runnging');
-    console.log(tardis.doctorwho());
     build();
     watch();
     done();
