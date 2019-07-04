@@ -33,6 +33,11 @@ let tardis = (function (theTime, pattern) {
 
     function convertTime(theTime) {
         theTime = checkUnixTime(theTime);
+
+        if (isNaN(theTime)){
+            return 'ERROR: Invalid time format';
+        }else{
+
         let date = new Date(theTime * 1000);
         let dateObj = {
             year: date.getYear(),
@@ -77,6 +82,7 @@ let tardis = (function (theTime, pattern) {
         dateObj.tt = (date.hour < 11) ? "am" : "pm";
 
         return dateObj;
+        }
     }
 
     function checkUnixTime(theTime) {
@@ -109,8 +115,20 @@ let tardis = (function (theTime, pattern) {
         //console.log("replaceAll", str, replaceWhat, replaceTo);
         replaceWhat = replaceWhat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         var re = new RegExp(replaceWhat, 'g');
-        return str.replace(re, replaceTo);;
+        return str.replace(re, replaceTo);
     }
+
+
+    let workTweleve = theHour => {
+        let hours = theHour;
+        if (hours > 12) {
+            hours = (hours - 12);
+        } else if (hours == 0) {
+            hours = "12";
+        }
+
+        return hours;
+    };
 
     // Public Methods ----------------------------------------------------------------------------------------------- //
     
@@ -155,107 +173,127 @@ let tardis = (function (theTime, pattern) {
     // Preset patterns
     let ISO = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullYear + "-" + thisDate.MMonth + "-" + thisDate.day;
-
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullYear + "-" + thisDate.MMonth + "-" + thisDate.day;
+        }
         return formattedDate;
     };
 
     let ShortDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.MMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.MMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let LongDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.shortMonth + ' ' + thisDate.day +  ' ' + thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.shortMonth + ' ' + thisDate.day +  ' ' + thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let MonthDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
-
+        let formattedDate = thisDate; 
+        if (typeof thisDate ==  "object"){
+            formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
+        }
+        
         return formattedDate;
     };
 
     let MonthDateTime = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
+        }
 
         return formattedDate;
     };
 
     let MonthDateTime12 = theTime => {
         let thisDate = convertTime(theTime);
-
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + workTweleve(thisDate.hour) + ':' + thisDate.min + ' ' + thisDate.TT;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + workTweleve(thisDate.hour) + ':' + thisDate.min + ' ' + thisDate.TT;
+        }
 
         return formattedDate;
     };
 
     let DayMonthDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullDay + ', ' + thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullDay + ', ' + thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let Year = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let Month = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullMonth;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullMonth;
+        }
 
         return formattedDate;
     };
 
     let Day = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullDay;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullDay;
+        }
 
         return formattedDate;
     };
 
     let TimeOfDay = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.hour + ':' + thisDate.min + ':' + thisDate.SSec;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.hour + ':' + thisDate.min + ':' + thisDate.SSec;
+        }
 
         return formattedDate;
     };
 
     let TimeOfDay12 = theTime => {
         let thisDate = convertTime(theTime);
-        
-        let formattedDate = workTweleve(thisDate.hour) + ':' + thisDate.min + ':' + thisDate.SSec + " " + thisDate.TT;;
-
-        return formattedDate;
-    };
-
-    let workTweleve = theHour =>{
-        let hours = theHour;
-        if (hours > 0 && hours <= 12) {
-            hours = hours;
-        } else if (hours > 12) {
-            hours = (hours - 12);
-        } else if (hours == 0) {
-            hours = "12";
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = workTweleve(thisDate.hour) + ':' + thisDate.min + ':' + thisDate.SSec + " " + thisDate.TT;
         }
 
-        return hours;
+        return formattedDate;
     };
 
     // Nerd stuff
     let doctorwho = function () {
         console.log('Spoilers!');
-        let quotes = ['Bowties are cool.', 'Rule 1, the Doctor lies.', 'I’m a mad man with a box.', 'Run!', 'and Don’t Blink!', 'Fezzes are cool.', 'Never cruel or cowardly. Never give up, never give in.', 'Do what I do. Hold tight and pretend it’s a plan!', 'Rest is for the weary, sleep is for the dead', 'We’re all stories, in the end. Just make it a good one, eh?', 'Good men don’t need rules', 'Never run when you’re scared.', 'What’s the point in two hearts if you can’t be a bit forgiving now and then?', 'There’s no point in being grown up if you can’t be childish sometimes.', 'You want weapons? We’re in a library! Books! The best weapons in the world!', 'A straight line may be the shortest distance between two points, but it is by no means the most interesting', 'Come on, Rory! It isn’t rocket science, it’s just quantum physics!', 'Big flashy things have my name written all over them. Well… not yet, give me time and a crayon.', 'In 900 years of time and space, I’ve never met anyone who wasn’t important', 'Almost every species in the universe has an irrational fear of the dark. But they’re wrong. ‘Cause it’s not irrational.', 'Biting’s excellent. It’s like kissing – only there is a winner.', 'Never be certain of anything. It’s a sign of weakness.', 'Spoilers!', 'Geronimo', 'Hello Sweetie'];
+        let quotes = ['Bowties are cool.', 'Rule 1, the Doctor lies.', 'I’m a mad man with a box.', 'Run!', 'and Don’t Blink!', 'Fezzes are cool.', 'Never cruel or cowardly. Never give up, never give in.', 'Do what I do. Hold tight and pretend it’s a plan!', 'Rest is for the weary, sleep is for the dead', 'We’re all stories, in the end. Just make it a good one, eh?', 'Good men don’t need rules', 'Never run when you’re scared.', 'What’s the point in two hearts if you can’t be a bit forgiving now and then?', 'There’s no point in being grown up if you can’t be childish sometimes.', 'You want weapons? We’re in a library! Books! The best weapons in the world!', 'A straight line may be the shortest distance between two points, but it is by no means the most interesting', 'Come on, Rory! It isn’t rocket science, it’s just quantum physics!', 'Big flashy things have my name written all over them. Well… not yet, give me time and a crayon.', 'In 900 years of time and space, I’ve never met anyone who wasn’t important', 'Almost every species in the universe has an irrational fear of the dark. But they’re wrong. ‘Cause it’s not irrational.', 'Biting’s excellent. It’s like kissing – only there is a winner.', 'Never be certain of anything. It’s a sign of weakness.', 'Spoilers!', 'Geronimo', 'Hello Sweetie', 'Allons-y'];
 
         return quotes[Math.floor(Math.random() * quotes.length)];
     };
@@ -281,19 +319,21 @@ let tardis = (function (theTime, pattern) {
 }());
 
 
-console.log(tardis.dateparts());
+console.log(tardis.dateparts()); 
+console.log(tardis.dateparts('apple suace')); 
 // console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:SS TT tt'));
 // console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt'));
 // console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
 // console.log(tardis.patterned('', 'MMMM MMM , MM M m'));
 // console.log(tardis.patterned('', 'DDDD DDD DD, D d'));
 // console.log(tardis.TimeOfDay());
-console.log(tardis.TimeOfDay12());
+//console.log(tardis.TimeOfDay12());
 // console.log(tardis.Month());
 // console.log(tardis.Day());
 // console.log('-------------------------------------');
 // console.log(tardis.dateparts(1133481000));
 // console.log(tardis.DayMonthDate(1133481000));
 // console.log(tardis.MonthDateTime(1133481000));
-console.log(tardis.MonthDateTime12(1133481000));
-console.log(tardis.MonthDate(1133481000));
+//console.log(tardis.MonthDateTime12(1133481000));
+//console.log(tardis.MonthDate(1133481000));
+//console.log(tardis.MonthDate('apple suace'));
