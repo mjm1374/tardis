@@ -1,7 +1,7 @@
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.3.0
-Updated: June 29, 2019
+version: v1.4.0
+Updated: June 30, 2019
 Author: Mike McAllister
 Email: mike@logikbox.com
 Site: https://logikbox.com
@@ -19,9 +19,12 @@ public methods:
 /*jshint esversion: 6 */
 let tardis = (function (theTime, pattern) {
     // Keep this variables private inside this closure scope
+
+    // Patterns and Keys must stay in sync vlaue and size wise,
+    const patterns = ["YYYY", "YYY", "YY", "y", "MMMM", "MMM", "MM", "M", "m", "DDDD", "DDD", "DD", "D", "d", "HHHH", "HH", "H", "h", "IIII", "II", "I", "i", "SSSS", "SS", "S","s","TT","tt"];
+    const keys = ["fullYear", "wordYear", "YYear", "year", "fullMonth", "shortMonth", "MMonth", "month", "monthInt", "fullDay", "shortDay", "DDay", "day", "dayInt", "wordHour", "HHour", "hour", "hourInt", "wordMin", "MMin", "min", "minInt", "wordSec", "SSec", "sec", "secInt", "TT", "tt"];
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"];
-    const patterns = ["YYYY", "YYY", "YY", "y", "MMMM", "MMM", "MM", "M", "m", "DDDD", "DDD", "DD", "D", "d", "HHHH", "HH", "H", "h", "IIII", "II", "I", "i", "SSSS", "SS", "S","s","TT","tt"];
     const a = ['', 'one ', 'two ', 'three ', 'four ', 'five ', 'six ', 'seven ', 'eight ', 'nine ', 'ten ', 'eleven ', 'twelve ', 'thirteen ', 'fourteen ', 'fifteen ', 'sixteen ', 'seventeen ', 'eighteen ', 'nineteen '];
     const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
     
@@ -30,6 +33,11 @@ let tardis = (function (theTime, pattern) {
 
     function convertTime(theTime) {
         theTime = checkUnixTime(theTime);
+
+        if (isNaN(theTime)){
+            return 'ERROR: Invalid time format';
+        }else{
+
         let date = new Date(theTime * 1000);
         let dateObj = {
             year: date.getYear(),
@@ -63,11 +71,18 @@ let tardis = (function (theTime, pattern) {
             HHour: ("0" + date.getHours()).slice(-2), 
             MMin: ("0" + date.getMinutes()).slice(-2),
             SSec: ("0" + date.getSeconds()).slice(-2),
+            TT: null,
+            tt: null,
 
             utc: date,
             timestamp: theTime
         };
+
+        dateObj.TT = (date.hour < 11) ? "AM" : "PM";
+        dateObj.tt = (date.hour < 11) ? "am" : "pm";
+
         return dateObj;
+        }
     }
 
     function checkUnixTime(theTime) {
@@ -100,8 +115,20 @@ let tardis = (function (theTime, pattern) {
         //console.log("replaceAll", str, replaceWhat, replaceTo);
         replaceWhat = replaceWhat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         var re = new RegExp(replaceWhat, 'g');
-        return str.replace(re, replaceTo);;
+        return str.replace(re, replaceTo);
     }
+
+
+    let workTweleve = theHour => {
+        let hours = theHour;
+        if (hours > 12) {
+            hours = (hours - 12);
+        } else if (hours == 0) {
+            hours = "12";
+        }
+
+        return hours;
+    };
 
     // Public Methods ----------------------------------------------------------------------------------------------- //
     
@@ -121,144 +148,20 @@ let tardis = (function (theTime, pattern) {
     let patterned = (theTime, pattern) => {
         let thisDate = convertTime(theTime);
         let replaceStr = '';
-        let TT = (thisDate.hour < 11) ? "AM" : "PM";
-        let tt = (thisDate.hour < 11) ? "am" : "pm";
         let replaceMap = [];
 
-        var thisField = 'fullYear';
-        //console.log('test:' , eval('thisDate.'+ thisField ));
 
         patterns.forEach(function (val, index) {
             let thisEdit = '';
-            switch (val) {
-                case 'YYYY'://0
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.fullYear);
-                    break;
-                case 'YYY'://1
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.wordYear);
-                    break;
-                case 'YY'://2
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.YYear);
-                    break;
-                case 'y': //3
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.year);
-                    break;
-                case 'MMMM': //4
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.fullMonth);
-                    break;
-                    case 'MMM'://5
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.shortMonth);
-                    break;
-                case 'MM': //6
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.MMonth);
-                    break;
-                case 'M': //7
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.month);
-                    break;
-                case 'm': //8
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.monthInt);
-                    break;
-                case 'DDDD': //9
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.fullDay);
-                    break;
-                case 'DDD': //10
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.shortDay);
-                    break;
-                case 'DD': //11
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.DDay);
-                    break;
-                case 'D': //12
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.day);
-                    break;
-                case 'd': //13
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.dayInt);
-                    break;
-                case 'HHHH': //14
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.wordHour);
-                    break;
-                case 'HH': //15
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.HHour);
-                    break;
-                case 'H': //16
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.hour);
-                    break;
-                case 'h': //17
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.hourInt);
-                    break;
-                case 'IIII': //18
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.wordMin);
-                    break;
-                case 'II': //19
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.MMin);
-                    break;
-                case 'I': //20
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.min);
-                    break;
-                case 'i': //21
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.minInt);
-                    break;
-                case 'SSSS': //22
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.wordSec);
-                    break;
-                case 'SS': //23
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.SSec);
-                    break;
-                case 'S': //24
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, thisDate.sec);
-                    //console.log(index + ' - ' + thisDate.sec);
-                    break;
-                case 's': //25
-                    replaceStr = '{{' + index + '}}'; 
-                    thisEdit = new replacement(replaceStr, thisDate.secInt);
-                    //console.log(index + ' - ' + thisDate.secInt);
-                    break;
-                case 'TT': //26
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, TT);
-                    //console.log(index + ' - ' + TT);
-                    break;
-                case 'tt': //27
-                    replaceStr = '{{' + index + '}}';
-                    thisEdit = new replacement(replaceStr, tt);
-                    //console.log(index + ' - ' + tt);
-                    break;
-            }
+            replaceStr = '{{' + index + '}}';
+            thisEdit = new replacement(replaceStr, eval('thisDate.' + keys[index]));
             replaceMap.push(thisEdit);
             pattern = replaceAll(pattern, val, replaceStr);
-
-            
         });
 
         for (var i = 0; i < replaceMap.length; i++) {
             let rpl = replaceMap[i];
-
             pattern = replaceAll(pattern, rpl.key, rpl.val);
- 
         }
 
         return {
@@ -270,102 +173,119 @@ let tardis = (function (theTime, pattern) {
     // Preset patterns
     let ISO = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullYear + "-" + thisDate.MMonth + "-" + thisDate.day;
-
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullYear + "-" + thisDate.MMonth + "-" + thisDate.day;
+        }
         return formattedDate;
     };
 
     let ShortDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.MMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.MMonth + "/" + thisDate.day + "/" + thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let LongDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.shortMonth + ' ' + thisDate.day +  ' ' + thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.shortMonth + ' ' + thisDate.day +  ' ' + thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let MonthDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
-
+        let formattedDate = thisDate; 
+        if (typeof thisDate ==  "object"){
+            formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
+        }
+        
         return formattedDate;
     };
 
     let MonthDateTime = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + thisDate.hour + ':' + thisDate.min;
+        }
 
         return formattedDate;
     };
 
     let MonthDateTime12 = theTime => {
         let thisDate = convertTime(theTime);
-        let hours = thisDate.hour;
-        if (hours > 0 && hours <= 12) {
-            hours = hours;
-        } else if (hours > 12) {
-            hours = (hours - 12);
-        } else if (hours == 0) {
-            hours = "12";
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + workTweleve(thisDate.hour) + ':' + thisDate.min + ' ' + thisDate.TT;
         }
-        let TT = (hours >= 12) ? "AM" : "PM";
-        let formattedDate = thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear + ' ' + hours + ':' + thisDate.min + ' ' + TT;
 
         return formattedDate;
     };
 
     let DayMonthDate = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullDay + ', ' + thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullDay + ', ' + thisDate.fullMonth + ' ' + thisDate.day + ', ' + thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let Year = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullYear;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullYear;
+        }
 
         return formattedDate;
     };
 
     let Month = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullMonth;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullMonth;
+        }
 
         return formattedDate;
     };
 
     let Day = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.fullDay;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.fullDay;
+        }
 
         return formattedDate;
     };
 
     let TimeOfDay = theTime => {
         let thisDate = convertTime(theTime);
-        let formattedDate = thisDate.hour + ':' + thisDate.min + ':' + thisDate.SSec;
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = thisDate.hour + ':' + thisDate.min + ':' + thisDate.SSec;
+        }
 
         return formattedDate;
     };
 
     let TimeOfDay12 = theTime => {
         let thisDate = convertTime(theTime);
-        let hours = thisDate.hour;
-        if (hours > 0 && hours <= 12) {
-            hours =  hours;
-        } else if (hours > 12) {
-            hours = (hours - 12);
-        } else if (hours == 0) {
-            hours = "12";
+        let formattedDate = thisDate;
+        if (typeof thisDate ==  "object") {
+            formattedDate = workTweleve(thisDate.hour) + ':' + thisDate.min + ':' + thisDate.SSec + " " + thisDate.TT;
         }
-        let TT = (hours >= 12) ? "AM" : "PM";
-        let formattedDate = hours + ':' + thisDate.min + ':' + thisDate.SSec + " " + TT;
 
         return formattedDate;
     };
@@ -373,7 +293,7 @@ let tardis = (function (theTime, pattern) {
     // Nerd stuff
     let doctorwho = function () {
         console.log('Spoilers!');
-        let quotes = ['Bowties are cool.', 'Rule 1, the Doctor lies.', 'I’m a mad man with a box.', 'Run!', 'and Don’t Blink!', 'Fezzes are cool.', 'Never cruel or cowardly. Never give up, never give in.', 'Do what I do. Hold tight and pretend it’s a plan!', 'Rest is for the weary, sleep is for the dead', 'We’re all stories, in the end. Just make it a good one, eh?', 'Good men don’t need rules', 'Never run when you’re scared.', 'What’s the point in two hearts if you can’t be a bit forgiving now and then?', 'There’s no point in being grown up if you can’t be childish sometimes.', 'You want weapons? We’re in a library! Books! The best weapons in the world!', 'A straight line may be the shortest distance between two points, but it is by no means the most interesting', 'Come on, Rory! It isn’t rocket science, it’s just quantum physics!', 'Big flashy things have my name written all over them. Well… not yet, give me time and a crayon.', 'In 900 years of time and space, I’ve never met anyone who wasn’t important', 'Almost every species in the universe has an irrational fear of the dark. But they’re wrong. ‘Cause it’s not irrational.', 'Biting’s excellent. It’s like kissing – only there is a winner.', 'Never be certain of anything. It’s a sign of weakness.', 'Spoilers!', 'Geronimo', 'Hello Sweetie'];
+        let quotes = ['Bowties are cool.', 'Rule 1, the Doctor lies.', 'I’m a mad man with a box.', 'Run!', 'and Don’t Blink!', 'Fezzes are cool.', 'Never cruel or cowardly. Never give up, never give in.', 'Do what I do. Hold tight and pretend it’s a plan!', 'Rest is for the weary, sleep is for the dead', 'We’re all stories, in the end. Just make it a good one, eh?', 'Good men don’t need rules', 'Never run when you’re scared.', 'What’s the point in two hearts if you can’t be a bit forgiving now and then?', 'There’s no point in being grown up if you can’t be childish sometimes.', 'You want weapons? We’re in a library! Books! The best weapons in the world!', 'A straight line may be the shortest distance between two points, but it is by no means the most interesting', 'Come on, Rory! It isn’t rocket science, it’s just quantum physics!', 'Big flashy things have my name written all over them. Well… not yet, give me time and a crayon.', 'In 900 years of time and space, I’ve never met anyone who wasn’t important', 'Almost every species in the universe has an irrational fear of the dark. But they’re wrong. ‘Cause it’s not irrational.', 'Biting’s excellent. It’s like kissing – only there is a winner.', 'Never be certain of anything. It’s a sign of weakness.', 'Spoilers!', 'Geronimo', 'Hello Sweetie', 'Allons-y'];
 
         return quotes[Math.floor(Math.random() * quotes.length)];
     };
@@ -399,19 +319,21 @@ let tardis = (function (theTime, pattern) {
 }());
 
 
-console.log(tardis.dateparts());
-console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:SS TT tt'));
-//console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt'));
+console.log(tardis.dateparts()); 
+console.log(tardis.dateparts('apple suace')); 
+// console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:SS TT tt'));
+// console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt'));
 // console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
 // console.log(tardis.patterned('', 'MMMM MMM , MM M m'));
 // console.log(tardis.patterned('', 'DDDD DDD DD, D d'));
 // console.log(tardis.TimeOfDay());
-// console.log(tardis.TimeOfDay12());
+//console.log(tardis.TimeOfDay12());
 // console.log(tardis.Month());
 // console.log(tardis.Day());
-// // console.log('-------------------------------------');
+// console.log('-------------------------------------');
 // console.log(tardis.dateparts(1133481000));
 // console.log(tardis.DayMonthDate(1133481000));
 // console.log(tardis.MonthDateTime(1133481000));
-// console.log(tardis.MonthDateTime12(1133481000));
-// console.log(tardis.MonthDate(1133481000));
+//console.log(tardis.MonthDateTime12(1133481000));
+//console.log(tardis.MonthDate(1133481000));
+//console.log(tardis.MonthDate('apple suace'));
