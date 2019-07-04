@@ -13,7 +13,9 @@ Include tardis.js in your build or link to it from you html
 # Usage
 
 ```javascript
+ 
 const tardis = require('lbx-tardis')
+ 
 
 const getDate = tardis.dateparts() // { year: 119, month: 6, day: 29, hour: 13, min: '04', sec: '12', fullYear: 2019, shortYear: '19', wordYear: 'two thousand and nineteen',  fullMonth: 'June',  shortMonth: 'Jun',....}
 
