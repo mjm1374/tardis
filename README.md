@@ -8,7 +8,7 @@ Via NPM: npm i lbx-tardis
 
 or
 
-Include tardis.js in your build or link to it from you html
+Include rename index.js to tardis.js in your build or link to it from you html
 
 # Usage
 

@@ -1,6 +1,6 @@
 /* 
 Tardis - a module for dates and time formating and converting.
-version: v1.4.1
+version: v1.6.0
 Updated: June 15, 2024
 Author: Mike McAllister
 Email: mike@logikbox.com
@@ -218,7 +218,7 @@ let tardis = (function (theTime, pattern) {
 			.substr(-9)
 			.match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
 		if (!n) return;
-		var str = '';
+		let str = '';
 		str +=
 			n[1] != 0
 				? (a[Number(n[1])] || b[n[1][0]] + ' ' + a[n[1][1]]) + 'crore '
@@ -248,7 +248,7 @@ let tardis = (function (theTime, pattern) {
 	function replaceAll(str, replaceWhat, replaceTo) {
 		//console.log("replaceAll", str, replaceWhat, replaceTo);
 		replaceWhat = replaceWhat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-		var re = new RegExp(replaceWhat, 'g');
+		let re = new RegExp(replaceWhat, 'g');
 		return str.replace(re, replaceTo);
 	}
 
@@ -293,7 +293,7 @@ let tardis = (function (theTime, pattern) {
 			pattern = replaceAll(pattern, val, replaceStr);
 		});
 
-		for (var i = 0; i < replaceMap.length; i++) {
+		for (let i = 0; i < replaceMap.length; i++) {
 			let rpl = replaceMap[i];
 			pattern = replaceAll(pattern, rpl.key, rpl.val);
 		}
@@ -521,7 +521,7 @@ let tardis = (function (theTime, pattern) {
 		Day: Day,
 		TimeOfDay: TimeOfDay,
 		TimeOfDay12: TimeOfDay12,
-		doctorwho: doctorwho,
+		//doctorwho: doctorwho,
 	};
 })();
 
