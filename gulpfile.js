@@ -7,11 +7,9 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
-const tardis = require('./src/index');
 
 const defaultTask = (done) => {
 	// place code for your default task here
-	console.log(tardis.doctorwho());
 	build();
 	watch();
 	done();
