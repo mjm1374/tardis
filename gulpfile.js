@@ -27,11 +27,7 @@ const scripts = () => {
 	return gulp
 		.src('./src/*.js')
 		.pipe(sourcemaps.init())
-		.pipe(
-			babel({
-				presets: ['@babel/env'],
-			})
-		)
+		.pipe(babel({ presets: ['@babel/env'] }))
 		.pipe(plumber())
 		.pipe(concat('tardis.js'))
 		.on('error', onError)
