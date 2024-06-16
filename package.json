@@ -24,14 +24,17 @@
   },
   "homepage": "https://github.com/mjm1374/tardis#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.5",
+    "@babel/core": "^7.24.7",
     "gulp": "^4.0.2"
   },
   "dependencies": {
-    "@babel/preset-env": "^7.4.5",
-    "express": "^4.17.1",
+    "@babel/preset-env": "^7.24.7",
+    "express": "^4.19.2",
     "gulp-babel": "^8.0.0",
     "gulp-cli": "^3.0.0",
-    "gulp-plumber": "^1.2.1"
+    "gulp-concat": "^2.6.1",
+    "gulp-plumber": "^1.2.1",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2"
   }
 }

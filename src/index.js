@@ -17,10 +17,10 @@ public methods:
 */
 
 /*jshint esversion: 6 */
-let tardis = (function (theTime, pattern) {
+const tardis = (function (theTime, pattern) {
 	// Keep this variables private inside this closure scope
 
-	// Patterns and Keys must stay in sync vlaue and size wise,
+	// Patterns and Keys must stay in sync value and size wise,
 	const patterns = [
 		'YYYY',
 		'YYY',
@@ -141,7 +141,7 @@ let tardis = (function (theTime, pattern) {
 
 	// Private Methods ----------------------------------------------------------------------------------------------- //
 
-	function convertTime(theTime) {
+	const convertTime = (theTime) => {
 		theTime = checkUnixTime(theTime);
 
 		if (isNaN(theTime)) {
@@ -192,9 +192,9 @@ let tardis = (function (theTime, pattern) {
 
 			return dateObj;
 		}
-	}
+	};
 
-	function checkUnixTime(theTime) {
+	const checkUnixTime = (theTime) => {
 		if (theTime == '' || theTime == undefined)
 			theTime = Math.floor(Date.now() / 1000);
 		let checkedTime = theTime;
@@ -209,10 +209,10 @@ let tardis = (function (theTime, pattern) {
 		}
 
 		return checkedTime;
-	}
+	};
 
 	// https://github.com/salmanm/num-words
-	function inWords(num) {
+	const inWords = (num) => {
 		if ((num = num.toString()).length > 9) return 'overflow';
 		let n = ('000000000' + num)
 			.substr(-9)
@@ -243,16 +243,15 @@ let tardis = (function (theTime, pattern) {
 				  (a[Number(n[5])] || b[n[5][0]] + ' ' + a[n[5][1]])
 				: '';
 		return str;
-	}
+	};
 
-	function replaceAll(str, replaceWhat, replaceTo) {
-		//console.log("replaceAll", str, replaceWhat, replaceTo);
+	const replaceAll = (str, replaceWhat, replaceTo) => {
 		replaceWhat = replaceWhat.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 		let re = new RegExp(replaceWhat, 'g');
 		return str.replace(re, replaceTo);
-	}
+	};
 
-	let workTweleve = (theHour) => {
+	const workTweleve = (theHour) => {
 		let hours = theHour;
 		if (hours > 12) {
 			hours = hours - 12;
@@ -265,7 +264,7 @@ let tardis = (function (theTime, pattern) {
 
 	// Public Methods ----------------------------------------------------------------------------------------------- //
 
-	let dateparts = (theTime) => {
+	const dateparts = (theTime) => {
 		return convertTime(theTime);
 	};
 
@@ -277,7 +276,7 @@ let tardis = (function (theTime, pattern) {
 	}
 
 	// Freeform patterns
-	let patterned = (theTime, pattern) => {
+	const patterned = (theTime, pattern) => {
 		let thisDate = convertTime(theTime);
 		let replaceStr = '';
 		let replaceMap = [];
@@ -305,9 +304,9 @@ let tardis = (function (theTime, pattern) {
 	};
 
 	// Preset patterns
-	let ISO = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const ISO = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullYear + '-' + thisDate.MMonth + '-' + thisDate.day;
@@ -315,9 +314,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let ShortDate = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const ShortDate = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.MMonth + '/' + thisDate.day + '/' + thisDate.fullYear;
@@ -326,9 +325,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let LongDate = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const LongDate = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.shortMonth +
@@ -341,9 +340,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let MonthDate = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const MonthDate = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullMonth +
@@ -356,9 +355,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let MonthDateTime = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const MonthDateTime = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullMonth +
@@ -375,9 +374,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let MonthDateTime12 = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const MonthDateTime12 = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullMonth +
@@ -396,9 +395,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let DayMonthDate = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const DayMonthDate = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullDay +
@@ -413,9 +412,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let Year = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const Year = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate = thisDate.fullYear;
 		}
@@ -423,9 +422,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let Month = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const Month = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate = thisDate.fullMonth;
 		}
@@ -433,9 +432,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let Day = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const Day = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate = thisDate.fullDay;
 		}
@@ -443,9 +442,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let TimeOfDay = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const TimeOfDay = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.hour + ':' + thisDate.min + ':' + thisDate.SSec;
@@ -454,9 +453,9 @@ let tardis = (function (theTime, pattern) {
 		return formattedDate;
 	};
 
-	let TimeOfDay12 = (theTime) => {
-		let thisDate = convertTime(theTime);
-		let formattedDate = thisDate;
+	const TimeOfDay12 = (theTime) => {
+		const thisDate = convertTime(theTime);
+		const formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				workTweleve(thisDate.hour) +
@@ -472,9 +471,9 @@ let tardis = (function (theTime, pattern) {
 	};
 
 	// Nerd stuff
-	let doctorwho = function () {
+	const doctorwho = () => {
 		console.log('Spoilers!');
-		let quotes = [
+		const quotes = [
 			'Bowties are cool.',
 			'Rule 1, the Doctor lies.',
 			'I’m a mad man with a box.',
@@ -521,12 +520,14 @@ let tardis = (function (theTime, pattern) {
 		Day: Day,
 		TimeOfDay: TimeOfDay,
 		TimeOfDay12: TimeOfDay12,
-		//doctorwho: doctorwho,
+		doctorwho: doctorwho,
 	};
 })();
 
-console.log(tardis.dateparts());
-console.log(tardis.dateparts('apple sauce'));
+// Output Tests
+
+// console.log(tardis.dateparts());
+// console.log(tardis.dateparts('apple sauce'));
 // console.log(tardis.patterned(1133481000, 'M/DD/YYYY - H:I:SS TT tt'));
 // console.log(tardis.patterned('2019-06-29T17:26:43', 'M/DD/YYYY - HH:II:SS tt'));
 // console.log(tardis.patterned('', 'MMMM DDDD, YYY'));
