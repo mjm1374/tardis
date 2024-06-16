@@ -6,6 +6,7 @@ const plumber = require('gulp-plumber');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const sourcemaps = require('gulp-sourcemaps');
+const rename = require('gulp-rename');
 const tardis = require('./src/index');
 
 const defaultTask = (done) => {
@@ -32,16 +33,11 @@ const scripts = () => {
 			})
 		)
 		.pipe(plumber())
-		.pipe(concat('tarids.min.js'))
+		.pipe(concat('tardis.js'))
 		.on('error', onError)
-		.pipe(
-			babel({
-				presets: ['@babel/env'],
-			})
-		)
-		.on('error', onError)
+		.pipe(gulp.dest('./dist'))
 		.pipe(uglify())
-		.on('error', onError)
+		.pipe(rename({ extname: '.min.js' }))
 		.pipe(sourcemaps.write('maps'))
 		.pipe(gulp.dest('./dist'));
 };
