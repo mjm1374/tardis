@@ -85,7 +85,7 @@ var tardis = function (theTime, pattern) {
   };
   var checkUnixTime = function checkUnixTime(theTime) {
     if (theTime == '' || theTime == undefined) theTime = Math.floor(Date.now() / 1000);
-    var checkedTime = theTime;
+    var checkedTime = theTime + '';
     if (!isNaN(Date.parse(checkedTime))) {
       checkedTime = checkedTime.split(' - ').map(function (date) {
         return Date.parse(date + '-0500') / 1000;

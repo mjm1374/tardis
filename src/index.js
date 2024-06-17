@@ -197,7 +197,7 @@ const tardis = (function (theTime, pattern) {
 	const checkUnixTime = (theTime) => {
 		if (theTime == '' || theTime == undefined)
 			theTime = Math.floor(Date.now() / 1000);
-		let checkedTime = theTime;
+		let checkedTime = theTime + '';
 
 		if (!isNaN(Date.parse(checkedTime))) {
 			checkedTime = checkedTime
