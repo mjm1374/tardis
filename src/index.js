@@ -306,7 +306,7 @@ const tardis = (function (theTime, pattern) {
 	// Preset patterns
 	const ISO = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullYear + '-' + thisDate.MMonth + '-' + thisDate.day;
@@ -316,7 +316,7 @@ const tardis = (function (theTime, pattern) {
 
 	const ShortDate = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.MMonth + '/' + thisDate.day + '/' + thisDate.fullYear;
@@ -327,7 +327,7 @@ const tardis = (function (theTime, pattern) {
 
 	const LongDate = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.shortMonth +
@@ -342,7 +342,7 @@ const tardis = (function (theTime, pattern) {
 
 	const MonthDate = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullMonth +
@@ -357,7 +357,7 @@ const tardis = (function (theTime, pattern) {
 
 	const MonthDateTime = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullMonth +
@@ -376,7 +376,7 @@ const tardis = (function (theTime, pattern) {
 
 	const MonthDateTime12 = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullMonth +
@@ -397,7 +397,7 @@ const tardis = (function (theTime, pattern) {
 
 	const DayMonthDate = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.fullDay +
@@ -414,7 +414,7 @@ const tardis = (function (theTime, pattern) {
 
 	const Year = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate = thisDate.fullYear;
 		}
@@ -424,7 +424,7 @@ const tardis = (function (theTime, pattern) {
 
 	const Month = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate = thisDate.fullMonth;
 		}
@@ -434,7 +434,7 @@ const tardis = (function (theTime, pattern) {
 
 	const Day = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate = thisDate.fullDay;
 		}
@@ -444,7 +444,7 @@ const tardis = (function (theTime, pattern) {
 
 	const TimeOfDay = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				thisDate.hour + ':' + thisDate.min + ':' + thisDate.SSec;
@@ -455,7 +455,7 @@ const tardis = (function (theTime, pattern) {
 
 	const TimeOfDay12 = (theTime) => {
 		const thisDate = convertTime(theTime);
-		const formattedDate = thisDate;
+		let formattedDate = thisDate;
 		if (typeof thisDate == 'object') {
 			formattedDate =
 				workTweleve(thisDate.hour) +
@@ -539,7 +539,7 @@ const tardis = (function (theTime, pattern) {
 // console.log(tardis.Day());
 // console.log('-------------------------------------');
 // console.log(tardis.dateparts(1133481000));
-// console.log(tardis.DayMonthDate(1133481000));
+// console.log(tardis.DayMonthDate());
 // console.log(tardis.MonthDateTime(1133481000));
 // console.log(tardis.MonthDateTime12(1133481000));
 // console.log(tardis.MonthDate(1133481000));
